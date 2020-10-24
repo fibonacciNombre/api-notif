@@ -1,0 +1,106 @@
+# Welcome to Serverless!
+#
+# This file is the main config file for your service.
+# It's very minimal at this point and uses default values.
+# You can always add more config options for more control.
+# We've included some commented out config examples here.
+# Just uncomment any of them to get that config option.
+#
+# For full config options, check the docs:
+#    docs.serverless.com
+#
+# Happy Coding!
+
+service: api-wks-notification
+
+# You can pin your service to only deploy with a specific Serverless version
+# Check out our docs for more details
+# frameworkVersion: "=X.X.X"
+
+provider:
+  name: aws
+  runtime: nodejs10.x
+  region: us-east-2
+  tracing:
+    apiGateway: true
+    lambda: true
+  apiGateway:
+    description: "ddapi"
+    restApiId: "kj1399g8ik"
+    restApiRootResourceId: "gvizm95wda"
+  deploymentBucket:
+    name: dds3drita
+    serverSideEncryption: AES256
+  environment:
+    WKS_CLOUD_HOST: "database-1.cho805s9k9ry.us-east-2.rds.amazonaws.com"
+    WKS_CLOUD_DATABASE: "rdsohidevsdg001"
+    WKS_CLOUD_USER: "admin"
+    WKS_CLOUD_PASSWORD: "Envio88."
+  iamRoleStatements:
+    - Effect: "Allow"
+      Action:
+        - "xray:PutTraceSegments"
+        - "xray:PutTelemetryRecords"
+      Resource:
+        - "*"
+
+functions:
+  hello:
+    handler: handler.hello
+    events:
+      - http:
+          path: users/create
+          method: get
+  
+  listarSolicitudes:
+    handler: src/controllers/SolicitudController.listarSolicitudes
+    description: LISTAR SOLICITUDES DE PREEMISION
+    tags:
+      PROYECTO: WKT
+      DOMINIO: PRUEBA
+    events:
+      - http:
+          path: solicitud/listar
+          method: post
+          cors: 
+            origin: '*'
+
+plugins:
+  - serverless-offline
+#      - s3: ${env:BUCKET}
+#      - schedule: rate(10 minutes)
+#      - sns: greeter-topic
+#      - stream: arn:aws:dynamodb:region:XXXXXX:table/foo/stream/1970-01-01T00:00:00.000
+#      - alexaSkill: amzn1.ask.skill.xx-xx-xx-xx
+#      - alexaSmartHome: amzn1.ask.skill.xx-xx-xx-xx
+#      - iot:
+#          sql: "SELECT * FROM 'some_topic'"
+#      - cloudwatchEvent:
+#          event:
+#            source:
+#              - "aws.ec2"
+#            detail-type:
+#              - "EC2 Instance State-change Notification"
+#            detail:
+#              state:
+#                - pending
+#      - cloudwatchLog: '/aws/lambda/hello'
+#      - cognitoUserPool:
+#          pool: MyUserPool
+#          trigger: PreSignUp
+
+#    Define function environment variables here
+#    environment:
+#      variable2: value2
+
+# you can add CloudFormation resource templates here
+#resources:
+#  Resources:
+#    NewResource:
+#      Type: AWS::S3::Bucket
+#      Properties:
+#        BucketName: my-new-bucket
+#  Outputs:
+#     NewOutput:
+#       Description: "Description for the output"
+#       Value: "Some output value"
